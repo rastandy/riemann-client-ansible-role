@@ -6,3 +6,7 @@ riemann_server_port: 5555
 riemann_conf_dir: /etc/riemann
 riemann_user:  riemann
 riemann_group: riemann
+
+riemann_tool_health: false
+riemann_tool_elasticsearch: false
+riemann_tool_nginx: false

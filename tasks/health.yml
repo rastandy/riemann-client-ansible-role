@@ -32,7 +32,6 @@
 #   --help                      Show this message
 
 - name: Enable riemann-health service
-  when: ansible_os_family == "Debian"
   template: src="tool-upstart.conf.j2" dest=/etc/init/riemann-health.conf owner=root group=root mode=0644
   with_items:
     - description: riemann-health
@@ -40,7 +39,22 @@
         riemann-health  \
         --host=`cat {{ riemann_conf_dir }}/server_host`  \
         --port=`cat {{ riemann_conf_dir }}/server_port`
-        
+  when:
+    - ansible_local.util.init.system is defined
+    - ansible_local.util.init.system == 'upstart'
+
+- name: Enable riemann-health service
+  template: src="service_systemd.j2" dest=/etc/systemd/system/riemann-health.service owner=root group=root mode=0644
+  with_items:
+    - description: riemann-health
+      user: root
+      command: |
+        /usr/local/bin/riemann-health  \
+          --host=`cat {{ riemann_conf_dir }}/server_host`  \
+          --port=`cat {{ riemann_conf_dir }}/server_port`
+  when:
+    - ansible_local.util.init.system is defined
+    - ansible_local.util.init.system == 'systemd'
+
 - name: Configure riemann-health service
   service: name=riemann-health state=started enabled=yes
-  

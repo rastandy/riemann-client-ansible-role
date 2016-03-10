@@ -1,0 +1,19 @@
+[Unit]
+Description={{item.description}}
+After=network.target
+
+[Service]
+User={{ item.user }}
+{% if item.umask is defined %}
+UMask={{ item.umask }}
+{% endif %}
+{% if item.systemd_default_instance is defined %}
+DefaultInstance={{ item.systemd_default_instance }}
+{% endif %}
+Restart=on-failure
+
+ExecStart={{ item.command }}
+ExecStop=/usr/bin/pkill {{ item.description }}
+
+[Install]
+WantedBy=multi-user.target

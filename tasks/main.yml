@@ -15,13 +15,21 @@
   tags:
     - riemann-client
 
+- name: Install Ruby with the gem executable
+  yum: name=ruby state=present
+  when: ansible_os_family == "RedHat"
+
+- name: Install Ruby with the gem executable
+  apt: name=ruby state=present
+  when: ansible_os_family == "Debian"
+
 - name: Install Ruby client
-  gem: name=riemann-client state=present
+  gem: name=riemann-client state=present user_install=no
   tags:
     - riemann-client
     
 - name: Install Riemann tools
-  gem: name=riemann-tools state=present
+  gem: name=riemann-tools state=present user_install=no
   tags:
     - riemann-client
 
