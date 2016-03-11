@@ -37,8 +37,8 @@
     - description: riemann-health
       command: |
         riemann-health  \
-        --host=`cat {{ riemann_conf_dir }}/server_host`  \
-        --port=`cat {{ riemann_conf_dir }}/server_port`
+        --host={{ riemann_server_host }} \
+        --port={{ riemann_tcp_port }}
   when:
     - ansible_local.util.init.system is defined
     - ansible_local.util.init.system == 'upstart'
@@ -50,8 +50,8 @@
       user: root
       command: |
         /usr/local/bin/riemann-health  \
-          --host=`cat {{ riemann_conf_dir }}/server_host`  \
-          --port=`cat {{ riemann_conf_dir }}/server_port`
+          --host={{ riemann_server_host }} \
+          --port={{ riemann_tcp_port }}
   when:
     - ansible_local.util.init.system is defined
     - ansible_local.util.init.system == 'systemd'
